@@ -2,35 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 32 43% 98%;
+    --foreground: 224 42% 13%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 224 42% 13%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 224 42% 13%;
     --primary: 24.6 95% 53.1%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --secondary: 34 45% 95%;
+    --secondary-foreground: 224 34% 16%;
+    --muted: 35 28% 94%;
+    --muted-foreground: 224 14% 42%;
+    --accent: 36 90% 93%;
+    --accent-foreground: 224 34% 16%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --border: 28 28% 88%;
+    --input: 28 28% 88%;
     --ring: 24.6 95% 53.1%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.75rem;
+    --radius: 0.9rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -49,24 +49,68 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-image:
+      radial-gradient(circle at 0% 0%, rgba(251, 146, 60, 0.14), transparent 36%),
+      radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.14), transparent 42%),
+      linear-gradient(180deg, #fff9f3 0%, #fffefe 60%);
+    min-height: 100vh;
+  }
+  @media (min-width: 1024px) {
+    body {
+      background-image:
+        radial-gradient(circle at 10% 8%, rgba(251, 146, 60, 0.2), transparent 30%),
+        radial-gradient(circle at 90% 92%, rgba(245, 158, 11, 0.18), transparent 34%),
+        radial-gradient(circle at 52% -12%, rgba(251, 191, 36, 0.16), transparent 26%),
+        linear-gradient(180deg, rgba(255, 248, 238, 0.98), rgba(255, 255, 255, 1));
+    }
+  }
+  .min-h-screen.bg-gray-50 {
+    background-image:
+      radial-gradient(circle at 0% 0%, rgba(251, 146, 60, 0.12), transparent 34%),
+      radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.12), transparent 40%),
+      linear-gradient(180deg, #fff8f1 0%, #fff 62%);
+  }
+  @media (min-width: 1024px) {
+    .min-h-screen.bg-gray-50 {
+      background-image:
+        radial-gradient(circle at 8% 10%, rgba(251, 146, 60, 0.2), transparent 28%),
+        radial-gradient(circle at 92% 88%, rgba(245, 158, 11, 0.18), transparent 32%),
+        linear-gradient(180deg, #fff7ee 0%, #fff 60%);
+    }
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: -0.02em;
+  }
+  ::selection {
+    background: rgba(249, 115, 22, 0.18);
+    color: hsl(var(--foreground));
+  }
+  *:focus-visible {
+    outline: 2px solid rgba(249, 115, 22, 0.75);
+    outline-offset: 2px;
+    border-radius: 0.5rem;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-orange-500 hover:bg-orange-600 text-white font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 active:scale-95;
+    @apply bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 active:scale-[0.98] shadow-[0_8px_20px_-10px_rgba(249,115,22,0.75)] hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-12px_rgba(249,115,22,0.85)] focus-visible:ring-2 focus-visible:ring-orange-300/70 focus-visible:ring-offset-2;
   }
   .btn-secondary {
-    @apply bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold px-5 py-2.5 rounded-xl transition-all duration-200;
+    @apply bg-white/90 backdrop-blur-sm border border-orange-100 text-gray-700 font-semibold px-5 py-2.5 rounded-xl transition-all duration-300 shadow-[0_10px_22px_-16px_rgba(15,23,42,0.5)] hover:-translate-y-0.5 hover:shadow-[0_16px_34px_-18px_rgba(249,115,22,0.35)] hover:border-orange-200;
   }
   .btn-outline {
-    @apply border-2 border-orange-500 text-orange-600 hover:bg-orange-50 font-semibold px-5 py-2.5 rounded-xl transition-all duration-200;
+    @apply border border-orange-300/90 bg-gradient-to-b from-orange-50 to-amber-50 text-orange-700 hover:from-orange-100 hover:to-amber-100 font-semibold px-5 py-2.5 rounded-xl transition-all duration-300;
   }
   .card-hover {
-    @apply bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300;
+    @apply bg-white/90 backdrop-blur-sm rounded-2xl border border-orange-100/80 shadow-[0_12px_30px_-20px_rgba(15,23,42,0.45)] hover:shadow-[0_24px_52px_-24px_rgba(249,115,22,0.5)] hover:border-orange-200 transition-all duration-300;
   }
   .input-field {
-    @apply w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-400/30 focus:border-orange-400 outline-none transition-all;
+    @apply w-full border border-orange-200/70 bg-white/95 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-4 focus:ring-orange-400/20 focus:border-orange-400 outline-none transition-all shadow-[inset_0_1px_1px_rgba(0,0,0,0.02)];
+  }
+  .glass-panel {
+    @apply bg-white/85 backdrop-blur-md border border-orange-100/80 rounded-2xl shadow-[0_18px_40px_-24px_rgba(15,23,42,0.35)];
   }
 }
 
@@ -98,15 +142,17 @@ html {
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes countUp {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-out forwards;
 }
 
 .animate-slideUp {
   animation: slideUp 0.6s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

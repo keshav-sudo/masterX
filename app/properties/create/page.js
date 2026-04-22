@@ -38,14 +38,14 @@ export default function CreateProperty() {
     minimumStay: '6 Months', availableFrom: '',
     furnishing: 'Semi Furnished', amenities: [],
     address: '', city: 'Bhopal', area: '', pincode: '',
-    photos: [], status: 'ACTIVE',
+    photos: [], status: 'PENDING',
   });
 
   const update = (key, value) => setForm(prev => ({ ...prev, [key]: value }));
 
   useEffect(() => {
     if (form.city) {
-      locationAPI.getAreas(form.city).then(res => setAreas(res.data.areas || [])).catch(() => {});
+      locationAPI.getAreas(form.city).then(res => setAreas(res.data.areas || res.data.data || [])).catch(() => {});
     }
   }, [form.city]);
 
@@ -65,7 +65,7 @@ export default function CreateProperty() {
     setStep(s => Math.min(4, s + 1));
   };
 
-  const handleSubmit = async (status = 'ACTIVE') => {
+  const handleSubmit = async (status = 'PENDING') => {
     setLoading(true);
     try {
       const data = {
@@ -76,7 +76,7 @@ export default function CreateProperty() {
         photos: form.photos.length ? form.photos : ['https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=400&fit=crop'],
       };
       await propertyAPI.create(data);
-      toast.success(status === 'DRAFT' ? 'Saved as draft!' : 'Property published!');
+      toast.success(status === 'DRAFT' ? 'Saved as draft!' : 'Property submitted for admin approval!');
       router.push('/properties/my-listings');
     } catch (err) {
       toast.error(err.response?.data?.error || 'Failed to create property');
@@ -305,7 +305,7 @@ export default function CreateProperty() {
                     className="btn-secondary">
                     Save Draft
                   </button>
-                  <button onClick={() => handleSubmit('ACTIVE')} disabled={loading}
+                  <button onClick={() => handleSubmit('PENDING')} disabled={loading}
                     className="btn-primary flex items-center gap-1.5">
                     {loading ? <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <><Check className="w-4 h-4" /> Publish</>}
                   </button>

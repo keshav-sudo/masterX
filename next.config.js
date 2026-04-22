@@ -1,18 +1,17 @@
 const nextConfig = {
-  output: 'standalone',
   images: {
     unoptimized: true,
-  },
-  experimental: {
-    // Remove if not using Server Components
-    serverComponentsExternalPackages: ['mongodb'],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'res.cloudinary.com' },
+      { protocol: 'https', hostname: '*.unsplash.com' },
+    ],
   },
   webpack(config, { dev }) {
     if (dev) {
-      // Reduce CPU/memory from file watching
       config.watchOptions = {
-        poll: 2000, // check every 2 seconds
-        aggregateTimeout: 300, // wait before rebuilding
+        poll: 2000,
+        aggregateTimeout: 300,
         ignored: ['**/node_modules'],
       };
     }
@@ -22,6 +21,18 @@ const nextConfig = {
     maxInactiveAge: 10000,
     pagesBufferLength: 2,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/v1/:path*',
+        destination: 'http://localhost:5000/api/v1/:path*',
+      },
+      {
+        source: '/socket.io/:path*',
+        destination: 'http://localhost:5000/socket.io/:path*',
+      },
+    ];
+  },
   async headers() {
     return [
       {
@@ -29,9 +40,6 @@ const nextConfig = {
         headers: [
           { key: "X-Frame-Options", value: "ALLOWALL" },
           { key: "Content-Security-Policy", value: "frame-ancestors *;" },
-          { key: "Access-Control-Allow-Origin", value: process.env.CORS_ORIGINS || "*" },
-          { key: "Access-Control-Allow-Methods", value: "GET, POST, PUT, DELETE, OPTIONS" },
-          { key: "Access-Control-Allow-Headers", value: "*" },
         ],
       },
     ];

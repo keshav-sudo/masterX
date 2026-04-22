@@ -70,22 +70,22 @@ export default function LoginPage() {
       <Navbar />
       <div className="max-w-md mx-auto px-4 py-12">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-extrabold text-xl">PX</span>
+          <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span className="text-white font-extrabold text-xl">MX</span>
           </div>
           <h1 className="text-2xl font-extrabold text-gray-900">Welcome Back</h1>
-          <p className="text-sm text-gray-500 mt-1">Login to your ProjectX account</p>
+          <p className="text-sm text-gray-500 mt-1">Login to your MasterX account</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div className="glass-panel p-6">
           {/* Tab Toggle */}
-          <div className="flex bg-gray-100 rounded-xl p-1 mb-6">
+          <div className="flex bg-white/80 border border-orange-100 rounded-xl p-1 mb-6">
             <button onClick={() => { setTab('phone'); setStep(1); }}
-              className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${tab === 'phone' ? 'bg-white text-orange-500 shadow-sm' : 'text-gray-500'}`}>
+              className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${tab === 'phone' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm' : 'text-gray-500 hover:bg-orange-50'}`}>
               <Phone className="w-4 h-4 inline mr-1.5" /> Phone OTP
             </button>
             <button onClick={() => { setTab('email'); setStep(1); }}
-              className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${tab === 'email' ? 'bg-white text-orange-500 shadow-sm' : 'text-gray-500'}`}>
+              className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${tab === 'email' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm' : 'text-gray-500 hover:bg-orange-50'}`}>
               <Mail className="w-4 h-4 inline mr-1.5" /> Email
             </button>
           </div>
@@ -153,9 +153,12 @@ export default function LoginPage() {
             </div>
           )}
 
-          <div className="mt-6 pt-4 border-t border-gray-100 text-center">
+          <div className="mt-6 pt-4 border-t border-gray-100 text-center space-y-2">
             <p className="text-sm text-gray-500">Don&apos;t have an account?{' '}
               <Link href="/register" className="text-orange-500 font-semibold hover:underline">Sign Up</Link>
+            </p>
+            <p className="text-sm">
+              <Link href="/forgot-password" className="text-gray-400 hover:text-orange-500 transition-colors">Forgot Password?</Link>
             </p>
           </div>
         </div>

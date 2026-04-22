@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PropertyCard from '@/components/PropertyCard';
@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
 export default function PropertiesBrowse() {
   const router = useRouter();
   const { city } = useLocationStore();
+  const [isHydrated, setIsHydrated] = useState(false);
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -24,7 +25,7 @@ export default function PropertiesBrowse() {
   const [areas, setAreas] = useState([]);
 
   const [filters, setFilters] = useState({
-    city: city || 'Bhopal',
+    city: 'Bhopal',
     type: '', area: '', furnishing: '', availableFor: '',
     budgetMin: '', budgetMax: '', sort: 'newest',
     verified: false, negotiable: false,
@@ -32,17 +33,27 @@ export default function PropertiesBrowse() {
 
   const updateFilter = (key, value) => setFilters(prev => ({ ...prev, [key]: value }));
 
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+    const nextCity = city || 'Bhopal';
+    setFilters(prev => (prev.city === nextCity ? prev : { ...prev, city: nextCity }));
+  }, [isHydrated, city]);
+
   // Fetch areas when city changes
   useEffect(() => {
     if (filters.city) {
-      locationAPI.getAreas(filters.city).then(res => setAreas(res.data.areas || [])).catch(() => {});
+      locationAPI.getAreas(filters.city).then(res => setAreas(res.data.areas || res.data.data || [])).catch(() => {});
     }
   }, [filters.city]);
 
   const fetchProperties = useCallback(async (pageNum = 1, append = false) => {
     setLoading(true);
     try {
-      const params = { page: pageNum, limit: 12, sort: filters.sort };
+      const params = { page: pageNum, limit: 12, sort: filters.sort, status: 'ACTIVE' };
       if (filters.city) params.city = filters.city;
       if (filters.type) params.type = filters.type;
       if (filters.area) params.area = filters.area;
@@ -54,8 +65,9 @@ export default function PropertiesBrowse() {
       if (filters.negotiable) params.negotiable = 'true';
 
       const { data } = await propertyAPI.browse(params);
-      setProperties(prev => append ? [...prev, ...(data.properties || [])] : (data.properties || []));
-      setTotal(data.total || 0);
+      const list = data.properties || data.data || data._list || [];
+      setProperties(prev => append ? [...prev, ...list] : list);
+      setTotal(data.total || list.length);
       setTotalPages(data.totalPages || 1);
     } catch { toast.error('Failed to load properties'); }
     setLoading(false);
@@ -64,7 +76,7 @@ export default function PropertiesBrowse() {
   useEffect(() => {
     setPage(1);
     fetchProperties(1);
-  }, [fetchProperties]);
+  }, [filters.city, filters.type, filters.area, filters.furnishing, filters.availableFor, filters.budgetMin, filters.budgetMax, filters.verified, filters.negotiable, filters.sort]);
 
   const loadMore = () => {
     if (page < totalPages) {
@@ -81,12 +93,12 @@ export default function PropertiesBrowse() {
       <Navbar />
 
       {/* Filter Bar */}
-      <div className="sticky top-16 z-40 bg-white border-b border-gray-100 shadow-sm">
+      <div className="sticky top-16 z-40 bg-white/85 backdrop-blur-md border-b border-orange-100/70 shadow-[0_14px_30px_-24px_rgba(15,23,42,0.7)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
           <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
             {/* City Selector */}
             <select value={filters.city} onChange={e => updateFilter('city', e.target.value)}
-              className="text-sm font-medium bg-orange-50 text-orange-600 border border-orange-200 rounded-full px-3 py-1.5 outline-none cursor-pointer">
+              className="text-sm font-semibold bg-gradient-to-r from-orange-100 to-amber-100 text-orange-700 border border-orange-200 rounded-full px-3 py-1.5 outline-none cursor-pointer shadow-sm">
               {['Bhopal', 'Indore', 'Patna', 'Jaipur', 'Kota', 'Lucknow', 'Noida', 'Delhi/NCR', 'Pune', 'Bangalore', 'Mumbai', 'Hyderabad'].map(c => (
                 <option key={c} value={c}>{c}</option>
               ))}
@@ -96,7 +108,7 @@ export default function PropertiesBrowse() {
             {quickTypes.map(t => (
               <button key={t} onClick={() => updateFilter('type', filters.type === t ? '' : t)}
                 className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition-colors ${
-                  filters.type === t ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  filters.type === t ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-[0_8px_16px_-10px_rgba(249,115,22,0.85)]' : 'bg-white border border-orange-100 text-gray-600 hover:bg-orange-50'
                 }`}>
                 {t}
               </button>
@@ -104,7 +116,7 @@ export default function PropertiesBrowse() {
 
             {/* Sort */}
             <select value={filters.sort} onChange={e => updateFilter('sort', e.target.value)}
-              className="text-xs bg-gray-100 rounded-full px-3 py-1.5 outline-none cursor-pointer ml-auto">
+              className="text-xs bg-white border border-orange-100 rounded-full px-3 py-1.5 outline-none cursor-pointer ml-auto">
               <option value="newest">Newest</option>
               <option value="price_asc">Price: Low to High</option>
               <option value="price_desc">Price: High to Low</option>
@@ -112,20 +124,20 @@ export default function PropertiesBrowse() {
             </select>
 
             {/* View Toggle */}
-            <div className="flex bg-gray-100 rounded-full p-0.5 hidden sm:flex">
+            <div className="hidden sm:flex bg-white border border-orange-100 rounded-full p-0.5">
               <button onClick={() => setView('grid')}
-                className={`p-1.5 rounded-full ${view === 'grid' ? 'bg-white shadow-sm' : ''}`}>
+                className={`p-1.5 rounded-full ${view === 'grid' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm' : 'text-gray-500'}`}>
                 <LayoutGrid className="w-4 h-4" />
               </button>
               <button onClick={() => setView('list')}
-                className={`p-1.5 rounded-full ${view === 'list' ? 'bg-white shadow-sm' : ''}`}>
+                className={`p-1.5 rounded-full ${view === 'list' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm' : 'text-gray-500'}`}>
                 <List className="w-4 h-4" />
               </button>
             </div>
 
             {/* Filters Button */}
             <button onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-medium hover:bg-gray-200">
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-orange-100 rounded-full text-xs font-medium hover:bg-orange-50">
               <SlidersHorizontal className="w-3.5 h-3.5" /> Filters
             </button>
           </div>
@@ -205,18 +217,22 @@ export default function PropertiesBrowse() {
       {/* Results Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-12">
         {loading && properties.length === 0 ? (
-          <div className={`grid gap-5 ${view === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'grid-cols-1'}`}>
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl overflow-hidden">
-                <div className="aspect-[16/10] bg-gray-200 animate-pulse" />
-                <div className="p-4 space-y-3">
-                  <div className="h-3 bg-gray-200 animate-pulse rounded-full w-1/2" />
-                  <div className="h-4 bg-gray-200 animate-pulse rounded-full w-3/4" />
-                  <div className="h-3 bg-gray-200 animate-pulse rounded-full w-1/3" />
+            <div className={`${view === 'grid'
+              ? 'flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+              : 'grid gap-5 grid-cols-1'}`}>
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className={view === 'grid' ? 'min-w-[86vw] max-w-[86vw] snap-center sm:min-w-0 sm:max-w-none' : ''}>
+                  <div className="glass-panel rounded-2xl overflow-hidden">
+                    <div className="aspect-[16/10] bg-gray-200 animate-pulse" />
+                    <div className="p-4 space-y-3">
+                      <div className="h-3 bg-gray-200 animate-pulse rounded-full w-1/2" />
+                      <div className="h-4 bg-gray-200 animate-pulse rounded-full w-3/4" />
+                      <div className="h-3 bg-gray-200 animate-pulse rounded-full w-1/3" />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
         ) : properties.length === 0 ? (
           <EmptyState
             icon="\ud83c\udfe0"
@@ -227,9 +243,19 @@ export default function PropertiesBrowse() {
           />
         ) : (
           <>
-            <div className={`grid gap-5 ${view === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'grid-cols-1 max-w-3xl'}`}>
-              {properties.map(p => <PropertyCard key={p.id} property={p} />)}
-            </div>
+            {view === 'grid' ? (
+              <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {properties.map((p) => (
+                  <div key={p.id} className="min-w-[86vw] max-w-[86vw] snap-center sm:min-w-0 sm:max-w-none">
+                    <PropertyCard property={p} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid gap-5 grid-cols-1 max-w-3xl">
+                {properties.map((p) => <PropertyCard key={p.id} property={p} />)}
+              </div>
+            )}
             {page < totalPages && (
               <div className="text-center mt-8">
                 <button onClick={loadMore} disabled={loading}

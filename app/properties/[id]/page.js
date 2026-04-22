@@ -26,8 +26,9 @@ export default function PropertyDetail() {
     setLoading(true);
     propertyAPI.getById(id)
       .then(({ data }) => {
-        setProperty(data.property);
-        setSaved(data.property?.isSaved || false);
+        const prop = data.property || data;
+        setProperty(prop);
+        setSaved(prop?.isSaved || data?.isSaved || false);
       })
       .catch(() => toast.error('Property not found'))
       .finally(() => setLoading(false));

@@ -47,6 +47,7 @@ export default function MyListings() {
 
   const tabs = [
     { key: 'all', label: 'All', icon: Home },
+    { key: 'pending', label: 'Pending', icon: Clock },
     { key: 'active', label: 'Active', icon: CheckCircle },
     { key: 'rented', label: 'Rented', icon: Clock },
     { key: 'draft', label: 'Draft', icon: FileText },
@@ -54,6 +55,7 @@ export default function MyListings() {
 
   const stats = {
     total: listings.length,
+    pending: listings.filter(l => l.status === 'PENDING').length,
     active: listings.filter(l => l.status === 'ACTIVE').length,
     views: listings.reduce((a, l) => a + (l.views || 0), 0),
   };
@@ -74,10 +76,14 @@ export default function MyListings() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div className="bg-white rounded-xl p-4 border border-gray-100">
               <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
               <p className="text-xs text-gray-400">Total Listings</p>
+            </div>
+            <div className="bg-white rounded-xl p-4 border border-gray-100">
+              <p className="text-2xl font-bold text-amber-500">{stats.pending}</p>
+              <p className="text-xs text-gray-400">Pending Approval</p>
             </div>
             <div className="bg-white rounded-xl p-4 border border-gray-100">
               <p className="text-2xl font-bold text-green-500">{stats.active}</p>
@@ -136,6 +142,7 @@ export default function MyListings() {
                         <p className="text-xs text-gray-400 mt-0.5">{p.area}, {p.city}</p>
                       </div>
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                        p.status === 'PENDING' ? 'bg-amber-100 text-amber-600' :
                         p.status === 'ACTIVE' ? 'bg-green-100 text-green-600' :
                         p.status === 'RENTED' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'
                       }`}>{p.status}</span>

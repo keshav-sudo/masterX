@@ -19,7 +19,7 @@ export default function ContactPage() {
   };
 
   const faqs = [
-    { q: 'Is ProjectX free to use?', a: 'Yes! Listing and browsing is completely free. We charge zero brokerage.' },
+    { q: 'Is MasterX free to use?', a: 'Yes! Listing and browsing is completely free. We charge zero brokerage.' },
     { q: 'How do I list my property?', a: 'Sign up, go to Properties > List Property, fill in the details and publish.' },
     { q: 'How does roommate matching work?', a: 'We compare lifestyle preferences, budget, and habits to calculate a compatibility score.' },
     { q: 'Is my phone number safe?', a: 'Your number is hidden until you choose to share it via the Show Number feature.' },
@@ -67,7 +67,7 @@ export default function ContactPage() {
             </div>
             <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
               <Mail className="w-5 h-5 text-orange-500" />
-              <p className="text-sm font-medium text-gray-900">support@projectx.in</p>
+              <p className="text-sm font-medium text-gray-900">support@masterx.in</p>
             </div>
             <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
               <MapPin className="w-5 h-5 text-orange-500" />

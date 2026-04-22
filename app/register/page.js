@@ -68,14 +68,14 @@ export default function RegisterPage() {
       <Navbar />
       <div className="max-w-md mx-auto px-4 py-12">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-extrabold text-xl">PX</span>
+          <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span className="text-white font-extrabold text-xl">MX</span>
           </div>
           <h1 className="text-2xl font-extrabold text-gray-900">Create Account</h1>
-          <p className="text-sm text-gray-500 mt-1">Join ProjectX — it&apos;s free!</p>
+          <p className="text-sm text-gray-500 mt-1">Join MasterX — it&apos;s free!</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div className="glass-panel p-6">
           {step === 1 ? (
             <div className="space-y-4">
               <div>

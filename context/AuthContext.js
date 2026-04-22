@@ -1,52 +1,34 @@
 'use client';
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import Cookies from 'js-cookie';
-import { userAPI, authAPI } from '@/lib/api';
+import { createContext, useContext, useCallback } from 'react';
+import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks';
+import { loginSuccess, logout as logoutAction, setUser, fetchUser } from '@/lib/redux/slices/authSlice';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  const refreshUser = useCallback(async () => {
-    try {
-      const { data } = await userAPI.getMe();
-      setUser(data.user);
-    } catch {
-      setUser(null);
-    }
-  }, []);
-
-  useEffect(() => {
-    const token = Cookies.get('accessToken');
-    if (token) {
-      refreshUser().finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
-  }, [refreshUser]);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.auth.user);
+  const loading = useAppSelector((state) => state.auth.loading);
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
   const login = useCallback((accessToken, refreshToken, userData) => {
-    Cookies.set('accessToken', accessToken, { expires: 7 });
-    Cookies.set('refreshToken', refreshToken, { expires: 30 });
-    setUser(userData);
-  }, []);
+    dispatch(loginSuccess({ accessToken, refreshToken, user: userData }));
+  }, [dispatch]);
 
-  const logout = useCallback(async () => {
-    try { await authAPI.logout(); } catch {}
-    Cookies.remove('accessToken');
-    Cookies.remove('refreshToken');
-    setUser(null);
-    if (typeof window !== 'undefined') window.location.href = '/login';
-  }, []);
+  const logoutFn = useCallback(() => {
+    dispatch(logoutAction());
+  }, [dispatch]);
 
   const updateUser = useCallback((partial) => {
-    setUser(prev => prev ? { ...prev, ...partial } : null);
-  }, []);
+    dispatch(setUser(partial));
+  }, [dispatch]);
+
+  const refreshUser = useCallback(async () => {
+    return dispatch(fetchUser());
+  }, [dispatch]);
 
   return (
-    <AuthContext.Provider value={{ user, loading, isAuthenticated: !!user, login, logout, updateUser, refreshUser }}>
+    <AuthContext.Provider value={{ user, loading, isAuthenticated, login, logout: logoutFn, updateUser, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );
