@@ -79,7 +79,7 @@ export default function RegisterPage() {
           {step === 1 ? (
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1.5 block">Full Name *</label>
+                <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Full Name *</label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input type="text" value={form.name} onChange={e => updateForm('name', e.target.value)}
@@ -87,7 +87,7 @@ export default function RegisterPage() {
                 </div>
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1.5 block">Phone Number *</label>
+                <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Phone Number *</label>
                 <div className="flex">
                   <span className="inline-flex items-center px-3 bg-gray-50 border border-r-0 border-gray-200 rounded-l-xl text-sm text-gray-500">+91</span>
                   <input type="tel" value={form.phone} onChange={e => updateForm('phone', e.target.value.replace(/\D/g, '').slice(0, 10))}
@@ -95,7 +95,7 @@ export default function RegisterPage() {
                 </div>
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1.5 block">Email (optional)</label>
+                <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Email (optional)</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input type="email" value={form.email} onChange={e => updateForm('email', e.target.value)}
@@ -103,7 +103,7 @@ export default function RegisterPage() {
                 </div>
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1.5 block">Password *</label>
+                <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Password *</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input type={showPassword ? 'text' : 'password'} value={form.password}

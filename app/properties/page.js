@@ -69,7 +69,10 @@ export default function PropertiesBrowse() {
       setProperties(prev => append ? [...prev, ...list] : list);
       setTotal(data.total || list.length);
       setTotalPages(data.totalPages || 1);
-    } catch { toast.error('Failed to load properties'); }
+    } catch (error) { 
+      console.error('Failed to load properties:', error);
+      toast.error('Failed to load properties'); 
+    }
     setLoading(false);
   }, [filters]);
 

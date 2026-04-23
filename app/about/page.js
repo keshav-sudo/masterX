@@ -39,9 +39,11 @@ export default function AboutPage() {
             const Icon = s.icon;
             return (
               <div key={s.label}>
-                <Icon className="w-8 h-8 text-orange-500 mx-auto mb-2" />
+                <div className="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <Icon className="w-6 h-6 text-orange-500" />
+                </div>
                 <p className="text-2xl font-extrabold text-gray-900">{s.value}</p>
-                <p className="text-sm text-gray-500">{s.label}</p>
+                <p className="text-sm text-gray-400">{s.label}</p>
               </div>
             );
           })}
@@ -58,10 +60,10 @@ export default function AboutPage() {
             { title: 'Mess & Tiffin', desc: 'Discover home-style meals, tiffin services, and mess options near you.', emoji: '\ud83c\udf5b' },
             { title: 'Personal Cooks', desc: 'Hire personal cooks for daily, weekly or monthly service. Vetted and reviewed.', emoji: '\ud83d\udc68\u200d\ud83c\udf73' },
           ].map(s => (
-            <div key={s.title} className="bg-white rounded-2xl border border-gray-100 p-6">
+            <div key={s.title} className="card-hover p-6 hover:-translate-y-0.5 transition-all duration-300">
               <div className="text-4xl mb-3">{s.emoji}</div>
               <h3 className="font-bold text-gray-900 mb-2">{s.title}</h3>
-              <p className="text-sm text-gray-500">{s.desc}</p>
+              <p className="text-sm text-gray-400">{s.desc}</p>
             </div>
           ))}
         </div>
@@ -77,12 +79,12 @@ export default function AboutPage() {
               { name: 'Priya Patel', role: 'Co-founder & CTO', city: 'Indore' },
               { name: 'Vikram Joshi', role: 'Co-founder & COO', city: 'Patna' },
             ].map(t => (
-              <div key={t.name} className="bg-white rounded-2xl p-6 border border-gray-100">
-                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-orange-500 font-bold text-xl">{t.name.charAt(0)}</span>
+              <div key={t.name} className="card-hover p-6 hover:-translate-y-0.5 transition-all duration-300">
+                <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center mx-auto mb-3 shadow-[0_8px_20px_-10px_rgba(249,115,22,0.7)]">
+                  <span className="text-white font-bold text-xl">{t.name.charAt(0)}</span>
                 </div>
                 <h4 className="font-bold text-gray-900">{t.name}</h4>
-                <p className="text-sm text-orange-500">{t.role}</p>
+                <p className="text-sm text-orange-500 font-semibold">{t.role}</p>
                 <p className="text-xs text-gray-400 mt-1">{t.city}</p>
               </div>
             ))}

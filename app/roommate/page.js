@@ -102,12 +102,12 @@ function RoommateCard({ roommate }) {
 
 function SkeletonCard() {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-5 text-center">
-      <div className="w-20 h-20 rounded-full bg-gray-200 animate-pulse mx-auto mb-3" />
-      <div className="h-4 bg-gray-200 animate-pulse rounded-full w-2/3 mx-auto mb-2" />
-      <div className="h-3 bg-gray-200 animate-pulse rounded-full w-1/2 mx-auto mb-3" />
-      <div className="w-24 h-24 rounded-full bg-gray-200 animate-pulse mx-auto mb-3" />
-      <div className="h-3 bg-gray-200 animate-pulse rounded-full w-1/3 mx-auto" />
+    <div className="bg-white rounded-2xl border border-orange-100/60 p-5 text-center shadow-sm">
+      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-orange-50 to-amber-50 animate-pulse mx-auto mb-3" />
+      <div className="h-4 bg-orange-50 animate-pulse rounded-full w-2/3 mx-auto mb-2" />
+      <div className="h-3 bg-orange-50 animate-pulse rounded-full w-1/2 mx-auto mb-3" />
+      <div className="w-24 h-24 rounded-full bg-orange-50 animate-pulse mx-auto mb-3" />
+      <div className="h-3 bg-orange-50 animate-pulse rounded-full w-1/3 mx-auto" />
     </div>
   );
 }
@@ -168,16 +168,16 @@ export default function RoommateBrowse() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-extrabold text-gray-900">Find Roommates in {effectiveCity}</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Smart matching based on lifestyle & preferences</p>
+            <h1 className="text-2xl font-extrabold text-gray-900">Find Roommates in <span className="text-orange-500">{effectiveCity}</span></h1>
+            <p className="text-sm text-gray-400 mt-0.5">Smart matching based on lifestyle & preferences</p>
           </div>
           <Link href="/roommate/create-profile" className="btn-primary text-sm">Create Profile</Link>
         </div>
         <div className="flex gap-2 mb-6 overflow-x-auto scrollbar-hide">
           {filters.map(f => (
             <button key={f} onClick={() => setActiveFilter(f)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${
-                activeFilter === f ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-orange-50 hover:text-orange-500'
+              className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
+                activeFilter === f ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-[0_6px_14px_-6px_rgba(249,115,22,0.7)]' : 'bg-white border border-orange-100 text-gray-600 hover:bg-orange-50 hover:text-orange-500'
               }`}>{f}</button>
           ))}
         </div>

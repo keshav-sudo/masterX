@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { propertyAPI } from '@/lib/api';
+import { propertyAPI, chatAPI } from '@/lib/api';
 import { AMENITIES } from '@/lib/constants';
 import toast from 'react-hot-toast';
 import {
@@ -55,6 +55,25 @@ export default function PropertyDetail() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
       toast.success('Number copied!');
+    }
+  };
+
+  const handleChat = async () => {
+    try {
+      const { data } = await chatAPI.startConversation({
+        recipientId: property?.ownerId,
+        propertyId: property?.id,
+      });
+      toast.success('Chat started!');
+      router.push('/chat');
+    } catch (error) {
+      console.error('Failed to start chat:', error);
+      const message = error.response?.data?.message || error.message || 'Failed to start chat';
+      if (message.includes('token') || message.includes('unauthorized') || message.includes('Unauthorized')) {
+        toast.error('Please login to chat');
+      } else {
+        toast.error(message);
+      }
     }
   };
 
@@ -279,7 +298,7 @@ export default function PropertyDetail() {
                 <PhoneIcon className="w-4 h-4" /> Show Number
               </button>
             )}
-            <button className="btn-primary flex items-center gap-1.5">
+            <button onClick={handleChat} className="btn-primary flex items-center gap-1.5">
               <MessageCircle className="w-4 h-4" /> Chat
             </button>
           </div>

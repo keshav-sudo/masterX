@@ -3,11 +3,11 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { cookAPI } from '@/lib/api';
+import { cookAPI, chatAPI } from '@/lib/api';
 import toast from 'react-hot-toast';
 import {
   ArrowLeft, Heart, Share2, MapPin, Star, Phone as PhoneIcon,
-  Clock, ChefHat, Utensils, BadgeCheck
+  Clock, ChefHat, Utensils, BadgeCheck, MessageCircle
 } from 'lucide-react';
 
 export default function CookDetail() {
@@ -42,6 +42,25 @@ export default function CookDetail() {
     const url = typeof window !== 'undefined' ? window.location.href : '';
     if (navigator.share) navigator.share({ title: cook?.fullName || cook?.name, url });
     else { navigator.clipboard.writeText(url); toast.success('Link copied!'); }
+  };
+
+  const handleChat = async () => {
+    try {
+      const { data } = await chatAPI.startConversation({
+        recipientId: cook?.userId,
+        cookId: cook?.id,
+      });
+      toast.success('Chat started!');
+      router.push('/chat');
+    } catch (error) {
+      console.error('Failed to start chat:', error);
+      const message = error.response?.data?.message || error.message || 'Failed to start chat';
+      if (message.includes('token') || message.includes('unauthorized') || message.includes('Unauthorized')) {
+        toast.error('Please login to chat');
+      } else {
+        toast.error(message);
+      }
+    }
   };
 
   if (loading) {
@@ -221,6 +240,23 @@ export default function CookDetail() {
           </div>
         )}
       </div>
+
+      {/* Sticky Bottom Bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 z-50 md:max-w-4xl md:mx-auto">
+        <div className="flex items-center justify-between">
+          <div>
+            <span className="text-xl font-extrabold text-gray-900">₹{(cook?.pricePerMeal || 0).toLocaleString('en-IN')}</span>
+            <span className="text-sm text-gray-400">/meal</span>
+          </div>
+          <div className="flex gap-2">
+            <button onClick={handleChat} className="btn-primary flex items-center gap-1.5">
+              <MessageCircle className="w-4 h-4" /> Chat
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="h-20" /> {/* Spacer for bottom bar */}
       <Footer />
     </div>
   );

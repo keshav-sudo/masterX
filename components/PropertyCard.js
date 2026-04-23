@@ -42,7 +42,7 @@ export default function PropertyCard({ property, onSaveToggle }) {
 
   return (
     <Link href={`/properties/${property?.id}`} className="block">
-      <div className="card-hover overflow-hidden group hover:-translate-y-1">
+      <div className="card-hover overflow-hidden group hover:-translate-y-0.5 transition-all duration-300">
         {/* Image */}
         <div className="relative aspect-[4/5] md:aspect-[16/10] overflow-hidden bg-gray-100">
           <div
@@ -110,7 +110,7 @@ export default function PropertyCard({ property, onSaveToggle }) {
             <MapPin className="w-3 h-3" />
             <span>{property?.area || 'Area'}, {property?.city || 'City'}</span>
           </div>
-          <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 mb-2 min-h-[2.5rem]">
+          <h3 className="font-bold text-gray-900 text-sm line-clamp-2 mb-2 min-h-[2.5rem]">
             {property?.title || 'Beautiful Property'}
           </h3>
           <div className="flex flex-wrap gap-1.5 mb-3">
@@ -132,10 +132,10 @@ export default function PropertyCard({ property, onSaveToggle }) {
           )}
           <div className="flex items-center justify-between pt-2 border-t border-orange-100/80">
             <div>
-              <span className="text-lg font-bold text-gray-900">₹{(property?.rent || 0).toLocaleString('en-IN')}</span>
-              <span className="text-xs text-gray-400">/month</span>
+              <span className="text-lg font-extrabold text-gray-900">₹{(property?.rent || 0).toLocaleString('en-IN')}</span>
+              <span className="text-xs text-gray-400 font-medium">/month</span>
             </div>
-            <span className="text-xs font-medium text-orange-500 flex items-center gap-1 group-hover:gap-2 transition-all">
+            <span className="text-xs font-bold text-orange-500 flex items-center gap-1 group-hover:gap-2 transition-all uppercase tracking-wider">
               View <ArrowRight className="w-3.5 h-3.5" />
             </span>
           </div>

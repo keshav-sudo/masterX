@@ -88,16 +88,16 @@ export default function ProfileSetup() {
             <p className="text-sm text-gray-500 mt-1">Let&apos;s set up your profile</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-5">
+          <div className="glass-panel p-6 space-y-5">
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 block">Your Name</label>
+              <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Your Name</label>
               <input type="text" value={form.name} onChange={e => update('name', e.target.value)}
                 className="input-field" placeholder="Full name" />
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-sm font-medium text-gray-700">City *</label>
+                <label className="text-sm font-semibold text-gray-700">City *</label>
                 <button onClick={detectLocation}
                   className="text-xs text-orange-500 flex items-center gap-1 hover:underline">
                   <Locate className="w-3 h-3" /> Detect GPS
@@ -110,7 +110,7 @@ export default function ProfileSetup() {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 block">Area</label>
+              <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Area</label>
               <select value={form.area} onChange={e => update('area', e.target.value)} className="input-field">
                 <option value="">Select area</option>
                 {areas.map(a => <option key={a} value={a}>{a}</option>)}
@@ -122,8 +122,8 @@ export default function ProfileSetup() {
               <div className="grid grid-cols-2 gap-2">
                 {interestOptions.map(opt => (
                   <button key={opt.id} onClick={() => toggleInterest(opt.id)}
-                    className={`p-3 rounded-xl border-2 text-left transition-colors ${
-                      form.interests.includes(opt.id) ? 'border-orange-500 bg-orange-50' : 'border-gray-200 hover:border-gray-300'
+                    className={`p-3 rounded-xl border-2 text-left transition-all ${
+                      form.interests.includes(opt.id) ? 'border-orange-500 bg-orange-50 shadow-[0_4px_12px_-4px_rgba(249,115,22,0.3)]' : 'border-gray-200 hover:border-orange-200 hover:bg-orange-50/30'
                     }`}>
                     <div className="text-2xl mb-1">{opt.icon}</div>
                     <div className="text-xs font-medium text-gray-700">{opt.label}</div>

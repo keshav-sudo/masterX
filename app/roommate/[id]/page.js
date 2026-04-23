@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { roommateAPI } from '@/lib/api';
+import { roommateAPI, chatAPI } from '@/lib/api';
 import toast from 'react-hot-toast';
 import {
   ArrowLeft, Heart, Share2, MapPin, MessageCircle, Send,
@@ -79,6 +79,25 @@ export default function RoommateDetail() {
     const url = typeof window !== 'undefined' ? window.location.href : '';
     if (navigator.share) navigator.share({ title: `${profile?.name || 'Roommate'} on MasterX`, url });
     else { navigator.clipboard.writeText(url); toast.success('Link copied!'); }
+  };
+
+  const handleChat = async () => {
+    try {
+      const { data } = await chatAPI.startConversation({
+        recipientId: profile?.userId || profile?.id,
+        roommateProfileId: profile?.id,
+      });
+      toast.success('Chat started!');
+      router.push('/chat');
+    } catch (error) {
+      console.error('Failed to start chat:', error);
+      const message = error.response?.data?.message || error.message || 'Failed to start chat';
+      if (message.includes('token') || message.includes('unauthorized') || message.includes('Unauthorized')) {
+        toast.error('Please login to chat');
+      } else {
+        toast.error(message);
+      }
+    }
   };
 
   if (loading) {
@@ -160,6 +179,10 @@ export default function RoommateDetail() {
             <button onClick={() => setShowInterest(true)}
               className="btn-primary flex-1 flex items-center justify-center gap-2">
               <Heart className="w-4 h-4" /> Send Interest
+            </button>
+            <button onClick={handleChat}
+              className="btn-primary flex items-center justify-center gap-2 px-4">
+              <MessageCircle className="w-4 h-4" /> Chat
             </button>
             <button onClick={handleShare}
               className="btn-secondary flex items-center justify-center gap-2 px-4">

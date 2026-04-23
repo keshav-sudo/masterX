@@ -79,13 +79,13 @@ export default function LoginPage() {
 
         <div className="glass-panel p-6">
           {/* Tab Toggle */}
-          <div className="flex bg-white/80 border border-orange-100 rounded-xl p-1 mb-6">
+          <div className="flex bg-white border border-orange-100 rounded-xl p-1 mb-6">
             <button onClick={() => { setTab('phone'); setStep(1); }}
-              className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${tab === 'phone' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm' : 'text-gray-500 hover:bg-orange-50'}`}>
+              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${tab === 'phone' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm' : 'text-gray-500 hover:bg-orange-50'}`}>
               <Phone className="w-4 h-4 inline mr-1.5" /> Phone OTP
             </button>
             <button onClick={() => { setTab('email'); setStep(1); }}
-              className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${tab === 'email' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm' : 'text-gray-500 hover:bg-orange-50'}`}>
+              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${tab === 'email' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm' : 'text-gray-500 hover:bg-orange-50'}`}>
               <Mail className="w-4 h-4 inline mr-1.5" /> Email
             </button>
           </div>
@@ -94,7 +94,7 @@ export default function LoginPage() {
             step === 1 ? (
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">Phone Number</label>
+                  <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Phone Number</label>
                   <div className="flex">
                     <span className="inline-flex items-center px-3 bg-gray-50 border border-r-0 border-gray-200 rounded-l-xl text-sm text-gray-500">+91</span>
                     <input type="tel" value={phone} onChange={e => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
@@ -109,7 +109,7 @@ export default function LoginPage() {
             ) : (
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">Enter OTP</label>
+                  <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Enter OTP</label>
                   <input type="text" value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                     placeholder="Enter 6-digit OTP" className="input-field text-center text-2xl tracking-[0.5em] font-bold" maxLength={6} />
                   <p className="text-xs text-gray-400 mt-2">OTP sent to +91 {phone}</p>
@@ -124,7 +124,7 @@ export default function LoginPage() {
           ) : (
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1.5 block">Email</label>
+                <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Email</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input type="email" value={email} onChange={e => setEmail(e.target.value)}
@@ -132,7 +132,7 @@ export default function LoginPage() {
                 </div>
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1.5 block">Password</label>
+                <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Password</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input type={showPassword ? 'text' : 'password'} value={password}

@@ -6,6 +6,25 @@
 
 @layer base {
   :root {
+    /* Colors - Hero Gradient System */
+    --color-hero-gradient: linear-gradient(135deg, #f97316 0%, #fb923c 40%, #facc15 100%);
+    --color-primary: #f97316;
+    --color-primary-light: #fb923c;
+    --color-primary-lighter: #facc15;
+    --color-accent: #fbbf24;
+    --color-accent-glow: rgba(249, 115, 22, 0.3);
+    
+    /* Glass UI Colors */
+    --color-glass-bg: rgba(255, 255, 255, 0.15);
+    --color-glass-border: rgba(255, 255, 255, 0.3);
+    --color-glass-backdrop: blur(8px);
+    
+    /* Text Colors */
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #f3f4f6;
+    --color-text-dark: #1f2937;
+    
+    /* Shadui base colors */
     --background: 32 43% 98%;
     --foreground: 224 42% 13%;
     --card: 0 0% 100%;
@@ -131,7 +150,18 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Animations */
+/* ===== ANIMATIONS ===== */
+
+/* Float animation (hero images) */
+@keyframes float-img {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+.animate-float-hero {
+  animation: float-img 4s ease-in-out infinite;
+}
+
+/* Fade & slide animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -142,12 +172,88 @@ html {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-out forwards;
 }
 
 .animate-slideUp {
   animation: slideUp 0.6s ease-out forwards;
+}
+
+.animate-in {
+  animation: fadeUp 0.5s ease forwards;
+}
+.animate-in:nth-child(2) { animation-delay: 0.1s; }
+.animate-in:nth-child(3) { animation-delay: 0.2s; }
+.animate-in:nth-child(4) { animation-delay: 0.3s; }
+.animate-in:nth-child(5) { animation-delay: 0.4s; }
+
+/* Skeleton shimmer loading */
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--color-primary) 25%, var(--color-primary-light) 50%, var(--color-primary) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius);
+}
+
+/* Pulse animation (for live indicators) */
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+.pulse { animation: pulse 2s infinite; }
+
+/* Glow effect */
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.4); }
+  50% { box-shadow: 0 0 30px rgba(249, 115, 22, 0.6); }
+}
+.animate-glow { animation: glow 3s ease-in-out infinite; }
+
+/* Hero background gradient */
+.hero-bg {
+  background: var(--color-hero-gradient);
+}
+
+/* Glass UI styling */
+.glass-tag {
+  background: var(--color-glass-bg);
+  backdrop-filter: var(--color-glass-backdrop);
+  border: 1px solid var(--color-glass-border);
+}
+
+.glass-card {
+  background: var(--color-glass-bg);
+  backdrop-filter: var(--color-glass-backdrop);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 1.5rem;
+}
+
+/* Dotted texture overlays */
+.dotted-texture {
+  background-image: radial-gradient(rgba(255,255,255,0.15) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+}
+
+.stats-dotted {
+  background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Tabular numbers for stats */
+.stat-number {
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
 }
 
 @media (prefers-reduced-motion: reduce) {

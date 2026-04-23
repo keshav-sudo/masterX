@@ -72,25 +72,25 @@ export default function NotificationsPage() {
             )}
           </div>
 
-          <div className="flex bg-gray-100 rounded-xl p-1 mb-6">
+          <div className="flex bg-white border border-orange-100 rounded-xl p-1 mb-6">
             <button onClick={() => setFilter('all')}
-              className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${filter === 'all' ? 'bg-white text-orange-500 shadow-sm' : 'text-gray-500'}`}>
+              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${filter === 'all' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm' : 'text-gray-500 hover:bg-orange-50'}`}>
               All
             </button>
             <button onClick={() => setFilter('unread')}
-              className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${filter === 'unread' ? 'bg-white text-orange-500 shadow-sm' : 'text-gray-500'}`}>
-              Unread {unreadCount > 0 && <span className="ml-1 px-1.5 py-0.5 bg-orange-100 text-orange-600 text-[10px] rounded-full">{unreadCount}</span>}
+              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${filter === 'unread' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm' : 'text-gray-500 hover:bg-orange-50'}`}>
+              Unread {unreadCount > 0 && <span className={`ml-1 px-1.5 py-0.5 text-[10px] rounded-full font-bold ${filter === 'unread' ? 'bg-white/20 text-white' : 'bg-orange-100 text-orange-600'}`}>{unreadCount}</span>}
             </button>
           </div>
 
           {loading ? (
             <div className="space-y-3">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="bg-white rounded-xl p-4 flex gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse shrink-0" />
+                <div key={i} className="bg-white rounded-xl p-4 flex gap-3 border border-orange-100/40">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-50 to-amber-50 animate-pulse shrink-0" />
                   <div className="flex-1 space-y-2">
-                    <div className="h-4 bg-gray-200 animate-pulse rounded w-3/4" />
-                    <div className="h-3 bg-gray-200 animate-pulse rounded w-1/2" />
+                    <div className="h-4 bg-orange-50 animate-pulse rounded w-3/4" />
+                    <div className="h-3 bg-orange-50 animate-pulse rounded w-1/2" />
                   </div>
                 </div>
               ))}

@@ -55,10 +55,10 @@ export default function ForgotPassword() {
           <ArrowLeft className="w-4 h-4" /> Back to Login
         </Link>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div className="glass-panel p-6">
           <div className="text-center mb-6">
-            <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Shield className="w-8 h-8 text-orange-500" />
+            <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_8px_20px_-10px_rgba(249,115,22,0.7)]">
+              <Shield className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-2xl font-extrabold text-gray-900">
               {step === 1 ? 'Forgot Password?' : 'Reset Password'}
@@ -71,7 +71,7 @@ export default function ForgotPassword() {
           {step === 1 ? (
             <form onSubmit={handleSendOtp} className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1.5 block">Phone Number</label>
+                <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Phone Number</label>
                 <div className="relative">
                   <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input type="tel" value={phone}
@@ -86,7 +86,7 @@ export default function ForgotPassword() {
           ) : (
             <form onSubmit={handleResetPassword} className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1.5 block">OTP</label>
+                <label className="text-sm font-semibold text-gray-700 mb-1.5 block">OTP</label>
                 <div className="relative">
                   <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input type="text" value={otp}
@@ -95,7 +95,7 @@ export default function ForgotPassword() {
                 </div>
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1.5 block">New Password</label>
+                <label className="text-sm font-semibold text-gray-700 mb-1.5 block">New Password</label>
                 <div className="relative">
                   <input type={showPassword ? 'text' : 'password'} value={newPassword}
                     onChange={e => setNewPassword(e.target.value)}

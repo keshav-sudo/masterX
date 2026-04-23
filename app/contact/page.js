@@ -58,34 +58,40 @@ export default function ContactPage() {
         <div>
           <h2 className="text-2xl font-extrabold text-gray-900 mb-6">Get in Touch</h2>
           <div className="space-y-4 mb-8">
-            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
-              <Phone className="w-5 h-5 text-orange-500" />
+            <div className="flex items-center gap-3 p-4 bg-orange-50/50 border border-orange-100/60 rounded-xl hover:bg-orange-50 transition-colors">
+              <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center shrink-0">
+                <Phone className="w-5 h-5 text-orange-500" />
+              </div>
               <div>
-                <p className="text-sm font-medium text-gray-900">+91 98765 43210</p>
+                <p className="text-sm font-semibold text-gray-900">+91 98765 43210</p>
                 <p className="text-xs text-gray-400">Mon-Sat, 9am-6pm</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
-              <Mail className="w-5 h-5 text-orange-500" />
-              <p className="text-sm font-medium text-gray-900">support@masterx.in</p>
+            <div className="flex items-center gap-3 p-4 bg-orange-50/50 border border-orange-100/60 rounded-xl hover:bg-orange-50 transition-colors">
+              <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center shrink-0">
+                <Mail className="w-5 h-5 text-orange-500" />
+              </div>
+              <p className="text-sm font-semibold text-gray-900">support@masterx.in</p>
             </div>
-            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
-              <MapPin className="w-5 h-5 text-orange-500" />
-              <p className="text-sm font-medium text-gray-900">MP Nagar Zone-1, Bhopal, MP 462011</p>
+            <div className="flex items-center gap-3 p-4 bg-orange-50/50 border border-orange-100/60 rounded-xl hover:bg-orange-50 transition-colors">
+              <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center shrink-0">
+                <MapPin className="w-5 h-5 text-orange-500" />
+              </div>
+              <p className="text-sm font-semibold text-gray-900">MP Nagar Zone-1, Bhopal, MP 462011</p>
             </div>
           </div>
 
           <h3 className="text-lg font-bold text-gray-900 mb-4">FAQs</h3>
           <div className="space-y-2">
             {faqs.map((faq, i) => (
-              <div key={i} className="border border-gray-100 rounded-xl overflow-hidden">
+              <div key={i} className="border border-orange-100/60 rounded-xl overflow-hidden bg-white hover:border-orange-200 transition-colors">
                 <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-900 text-left">
+                  className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-900 text-left hover:bg-orange-50/50 transition-colors">
                   {faq.q}
-                  <span className="text-gray-400">{openFaq === i ? '\u2212' : '+'}</span>
+                  <span className={`text-orange-400 font-bold text-lg transition-transform ${openFaq === i ? 'rotate-45' : ''}`}>+</span>
                 </button>
                 {openFaq === i && (
-                  <div className="px-4 pb-3 text-sm text-gray-500">{faq.a}</div>
+                  <div className="px-4 pb-3 text-sm text-gray-500 animate-fadeIn">{faq.a}</div>
                 )}
               </div>
             ))}

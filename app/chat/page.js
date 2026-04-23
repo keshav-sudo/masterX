@@ -18,8 +18,8 @@ function ConversationItem({ conv, active, onClick }) {
       className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-colors ${
         active ? 'bg-orange-50 border border-orange-200' : 'hover:bg-gray-50'
       }`}>
-      <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center shrink-0">
-        <span className="text-orange-600 font-bold text-sm">{name.charAt(0).toUpperCase()}</span>
+      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center shrink-0 shadow-sm">
+        <span className="text-white font-bold text-sm">{name.charAt(0).toUpperCase()}</span>
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between">
@@ -152,8 +152,8 @@ export default function ChatPage() {
                   <button onClick={() => { setShowList(true); setActiveConv(null); }} className="md:hidden p-1 text-gray-500">
                     <ArrowLeft className="w-5 h-5" />
                   </button>
-                  <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
-                    <span className="text-orange-600 font-bold">{(otherUser.name || 'U').charAt(0)}</span>
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center shadow-sm">
+                    <span className="text-white font-bold">{(otherUser.name || 'U').charAt(0)}</span>
                   </div>
                   <div>
                     <p className="font-semibold text-gray-900 text-sm">{otherUser.name || 'User'}</p>

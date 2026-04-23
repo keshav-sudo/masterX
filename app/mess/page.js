@@ -36,7 +36,7 @@ function MessCard({ mess }) {
 
   return (
     <Link href={`/mess/${mess.id}`}>
-      <div className="card-hover overflow-hidden group">
+      <div className="card-hover overflow-hidden group hover:-translate-y-0.5 transition-all duration-300">
         <div className="relative aspect-[4/5] md:aspect-[16/10] bg-gray-100 overflow-hidden">
           <div className="flex h-full overflow-x-auto snap-x snap-mandatory scrollbar-hide" onScroll={handleImageScroll}>
             {photos.map((photo, idx) => (
@@ -109,12 +109,12 @@ function MessCard({ mess }) {
 
 function SkeletonCard() {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-      <div className="aspect-[16/10] bg-gray-200 animate-pulse" />
+    <div className="bg-white rounded-2xl border border-orange-100/60 overflow-hidden shadow-sm">
+      <div className="aspect-[16/10] bg-gradient-to-br from-orange-50 to-amber-50 animate-pulse" />
       <div className="p-4 space-y-2">
-        <div className="h-4 bg-gray-200 animate-pulse rounded-full w-2/3" />
-        <div className="h-3 bg-gray-200 animate-pulse rounded-full w-1/2" />
-        <div className="h-4 bg-gray-200 animate-pulse rounded-full w-1/3 mt-2" />
+        <div className="h-4 bg-orange-50 animate-pulse rounded-full w-2/3" />
+        <div className="h-3 bg-orange-50 animate-pulse rounded-full w-1/2" />
+        <div className="h-4 bg-orange-50 animate-pulse rounded-full w-1/3 mt-2" />
       </div>
     </div>
   );
@@ -177,8 +177,8 @@ export default function MessBrowse() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-extrabold text-gray-900">{total || messList.length} Mess in {effectiveCity}</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Home-style meals near you</p>
+            <h1 className="text-2xl font-extrabold text-gray-900"><span className="text-orange-500">{total || messList.length}</span> Mess in {effectiveCity}</h1>
+            <p className="text-sm text-gray-400 mt-0.5">Home-style meals near you</p>
           </div>
           <Link href="/mess/register" className="btn-primary text-sm">Register Your Mess</Link>
         </div>
@@ -186,8 +186,8 @@ export default function MessBrowse() {
         <div className="flex gap-2 mb-6 overflow-x-auto scrollbar-hide">
           {filters.map(f => (
             <button key={f} onClick={() => setActiveFilter(f)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${
-                activeFilter === f ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-orange-50 hover:text-orange-500'
+              className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
+                activeFilter === f ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-[0_6px_14px_-6px_rgba(249,115,22,0.7)]' : 'bg-white border border-orange-100 text-gray-600 hover:bg-orange-50 hover:text-orange-500'
               }`}>{f}</button>
           ))}
         </div>
