@@ -4,9 +4,10 @@ import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { roommateAPI, locationAPI } from '@/lib/api';
+import { useUpload } from '@/hooks/useAPI';
 import { CITIES } from '@/lib/constants';
 import toast from 'react-hot-toast';
-import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Upload } from 'lucide-react';
 
 function StepIndicator({ current, total }) {
   return (
@@ -53,6 +54,7 @@ export default function CreateRoommateProfile() {
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [areas, setAreas] = useState([]);
+  const { upload, loading: uploading } = useUpload();
 
   const [form, setForm] = useState({
     photo: '', age: '', gender: 'MALE', profession: 'STUDENT',
@@ -62,6 +64,26 @@ export default function CreateRoommateProfile() {
     budgetMin: '', budgetMax: '', preferredAreas: [], hasRoom: false,
     bio: '', city: 'Bhopal', area: '',
   });
+
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Photo must be less than 5MB');
+      return;
+    }
+
+    try {
+      const res = await upload('/user/upload-image', file);
+      if (res?.imageUrl) {
+        setForm(prev => ({ ...prev, photo: res.imageUrl }));
+        toast.success('Photo uploaded successfully');
+      }
+    } catch (err) {
+      toast.error('Failed to upload photo');
+    }
+  };
 
   const update = (key, value) => setForm(prev => ({ ...prev, [key]: value }));
 
@@ -140,9 +162,37 @@ export default function CreateRoommateProfile() {
                   </div>
                 )}
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">Photo URL (optional)</label>
-                  <input type="text" value={form.photo} onChange={e => update('photo', e.target.value)}
-                    placeholder="Paste photo URL" className="input-field" />
+                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">Profile Photo</label>
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-100 flex-shrink-0 border-2 border-orange-100 relative group">
+                      {form.photo ? (
+                        <img src={form.photo} alt="Profile" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-400">
+                          <Upload className="w-6 h-6" />
+                        </div>
+                      )}
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={handlePhotoUpload} 
+                        disabled={uploading}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed" 
+                      />
+                    </div>
+                    <div className="flex-1">
+                      {uploading ? (
+                        <p className="text-sm text-orange-500 font-medium flex items-center gap-2">
+                          <span className="w-4 h-4 border-2 border-orange-200 border-t-orange-500 rounded-full animate-spin" /> Uploading...
+                        </p>
+                      ) : (
+                        <>
+                          <p className="text-sm text-gray-700 font-medium">Upload a clear photo</p>
+                          <p className="text-xs text-gray-400">JPG, PNG up to 5MB. Clear face visible.</p>
+                        </>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             )}

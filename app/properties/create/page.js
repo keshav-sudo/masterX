@@ -4,9 +4,10 @@ import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { propertyAPI, locationAPI } from '@/lib/api';
+import { useUpload } from '@/hooks/useAPI';
 import { PROPERTY_TYPES, FURNISHING_OPTIONS, AVAILABLE_FOR, AMENITIES, CITIES } from '@/lib/constants';
 import toast from 'react-hot-toast';
-import { ArrowLeft, ArrowRight, Check, Upload, X, Plus } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Upload, X, Plus, MapPin } from 'lucide-react';
 
 function StepIndicator({ current, total }) {
   return (
@@ -30,6 +31,8 @@ export default function CreateProperty() {
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [areas, setAreas] = useState([]);
+  const { upload, loading: uploading } = useUpload();
+  const [uploadCount, setUploadCount] = useState(0);
 
   const [form, setForm] = useState({
     title: '', description: '', propertyType: '2BHK', category: 'Residential',
@@ -42,6 +45,38 @@ export default function CreateProperty() {
   });
 
   const update = (key, value) => setForm(prev => ({ ...prev, [key]: value }));
+
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    
+    if (form.photos.length + files.length > 10) {
+      toast.error('You can only upload a maximum of 10 photos');
+      return;
+    }
+
+    setUploadCount(files.length);
+    const uploadedUrls = [];
+    
+    for (const file of files) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error(`File ${file.name} is too large (max 5MB)`);
+        continue;
+      }
+      try {
+        const res = await upload('/user/upload-image', file);
+        if (res?.imageUrl) uploadedUrls.push(res.imageUrl);
+      } catch (err) {
+        toast.error(`Failed to upload ${file.name}`);
+      }
+    }
+    
+    if (uploadedUrls.length) {
+      setForm(prev => ({ ...prev, photos: [...prev.photos, ...uploadedUrls] }));
+      toast.success(`Successfully uploaded ${uploadedUrls.length} photos`);
+    }
+    setUploadCount(0);
+  };
 
   useEffect(() => {
     if (form.city) {
@@ -244,44 +279,58 @@ export default function CreateProperty() {
             {/* Step 5: Photos */}
             {step === 4 && (
               <div className="space-y-4">
-                <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center">
-                  <Upload className="w-8 h-8 text-gray-300 mx-auto mb-3" />
-                  <p className="text-sm text-gray-500 mb-2">Drag & drop photos or paste image URLs</p>
-                  <p className="text-xs text-gray-400">Max 10 photos, 5MB each</p>
-                  <div className="mt-4 flex gap-2 justify-center">
-                    <input type="text" placeholder="Paste image URL and press Enter"
-                      className="input-field max-w-xs"
-                      onKeyDown={e => {
-                        if (e.key === 'Enter' && e.target.value) {
-                          update('photos', [...form.photos, e.target.value]);
-                          e.target.value = '';
-                        }
-                      }} />
-                  </div>
+                <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center relative overflow-hidden">
+                  <input 
+                    type="file" 
+                    multiple 
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploading}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed z-10" 
+                  />
+                  {uploading ? (
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="w-8 h-8 mb-3 animate-spin">
+                        <div className="w-full h-full rounded-full border-4 border-orange-200 border-t-orange-500" />
+                      </div>
+                      <p className="text-sm font-medium text-orange-500">Uploading {uploadCount} photos...</p>
+                    </div>
+                  ) : (
+                    <>
+                      <Upload className="w-8 h-8 text-gray-300 mx-auto mb-3" />
+                      <p className="text-sm font-medium text-gray-700 mb-1">Click or drag & drop photos here</p>
+                      <p className="text-xs text-gray-400">Max 10 photos, 5MB each. Supported formats: JPG, PNG, WEBP</p>
+                    </>
+                  )}
                 </div>
+
                 {form.photos.length > 0 && (
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-3">
                     {form.photos.map((url, i) => (
-                      <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
-                        <img src={url} alt="" className="w-full h-full object-cover" />
-                        <button onClick={() => update('photos', form.photos.filter((_, j) => j !== i))}
-                          className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full">
-                          <X className="w-3 h-3" />
+                      <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden bg-gray-100 shadow-sm border border-gray-200">
+                        <img src={url} alt={`Property ${i+1}`} className="w-full h-full object-cover" />
+                        <button 
+                          onClick={() => update('photos', form.photos.filter((_, j) => j !== i))}
+                          type="button"
+                          className="absolute top-2 right-2 p-1.5 bg-white/90 text-red-500 rounded-full hover:bg-red-50 hover:text-red-600 shadow-sm transition-colors z-20">
+                          <X className="w-4 h-4" />
                         </button>
-                        {i === 0 && <span className="absolute bottom-1 left-1 px-2 py-0.5 bg-orange-500 text-white text-[10px] rounded-full">Cover</span>}
+                        {i === 0 && <span className="absolute bottom-2 left-2 px-2 py-1 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-[10px] font-bold uppercase tracking-wider rounded-lg shadow-md">Cover Photo</span>}
                       </div>
                     ))}
                   </div>
                 )}
 
                 {/* Preview */}
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <h4 className="text-sm font-bold text-gray-700 mb-2">Preview</h4>
-                  <div className="bg-white rounded-xl border border-gray-100 p-3">
-                    <p className="text-xs text-orange-500 font-medium">{form.propertyType} \u00b7 {form.furnishing}</p>
-                    <p className="font-bold text-sm text-gray-900 mt-1">{form.title || 'Your property title'}</p>
-                    <p className="text-xs text-gray-400">{form.area || 'Area'}, {form.city}</p>
-                    <p className="text-lg font-bold text-gray-900 mt-2">₹{parseInt(form.rent || 0).toLocaleString('en-IN')}/month</p>
+                <div className="bg-gray-50 rounded-xl p-5 border border-gray-100 mt-6">
+                  <h4 className="text-sm font-bold text-gray-700 mb-3 uppercase tracking-wider">Listing Preview</h4>
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <p className="text-xs font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded-md">{form.propertyType} \u00b7 {form.furnishing}</p>
+                      <p className="text-lg font-extrabold text-gray-900">₹{parseInt(form.rent || 0).toLocaleString('en-IN')}<span className="text-xs text-gray-500 font-medium">/mo</span></p>
+                    </div>
+                    <p className="font-bold text-base text-gray-900 mb-1 leading-snug">{form.title || 'Your property title will appear here'}</p>
+                    <p className="text-sm text-gray-500 flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> {form.area || 'Area'}, {form.city}</p>
                   </div>
                 </div>
               </div>

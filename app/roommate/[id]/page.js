@@ -171,7 +171,7 @@ export default function RoommateDetail() {
 
           {/* Compatibility */}
           <div className="flex justify-center py-6 border-b border-gray-50">
-            <CompatibilityRing score={profile.compatibility || profile.compatibilityScore || 75} />
+            <CompatibilityRing score={profile.compatibility?.score || profile.compatibilityScore || 75} />
           </div>
 
           {/* Actions */}

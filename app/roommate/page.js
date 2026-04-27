@@ -75,7 +75,7 @@ function RoommateCard({ roommate }) {
         <h3 className="font-bold text-gray-900 text-sm">{roommate.name || roommate.user?.name}, {roommate.age}</h3>
         <span className="inline-block px-2 py-0.5 bg-gray-100 text-gray-500 text-[10px] font-medium rounded-full mt-1">{roommate.profession}</span>
         <div className="flex justify-center my-3">
-          <CompatibilityRing score={roommate.compatibility || roommate.compatibilityScore || 75} />
+          <CompatibilityRing score={roommate.compatibility?.score || roommate.compatibilityScore || 75} />
         </div>
         <div className="flex justify-center gap-2 mb-3">
           <span className="text-lg" title={roommate.food === 'VEG' || roommate.food === 'Veg' ? 'Vegetarian' : 'Non-Veg'}>
